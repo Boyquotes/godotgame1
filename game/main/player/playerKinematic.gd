@@ -1,15 +1,21 @@
 extends KinematicBody2D
 
-
 var velocity = Vector2()
 var movementBlocker = false
-var speed = 30000
+var speed = 300
 var mause
 var starthp = 100
 var hp = starthp
 var attackspeed = 10
+var projectile
+var canshoot = true
+var parent
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	parent = .get_parent()
+	projectile = Autoload.playerProjectile
+	projectile = load(projectile)
+	
 	pass # Replace with function body.
 
 func start_at(posx,posy):
@@ -27,6 +33,8 @@ func getinput():
 		velocity.x += 120
 	if Input.is_action_pressed('left') and movementBlocker == false:
 		velocity.x -= 120
+	if Input.is_action_pressed("leftclick") and movementBlocker == false:
+		shoot()
 	velocity = velocity.normalized() * speed
 	mause = get_global_mouse_position()
 	$body/Position2D.look_at(mause)
@@ -34,6 +42,17 @@ func getinput():
 		$body.scale.x = -1
 	elif (position.x - mause.x)< 0 :
 		$body.scale.x = 1		
+
+func shoot():
+	if canshoot== true:
+		var missile = projectile.instance()
+		$asTimer.wait_time= missile.delay
+		$body/Position2D.look_at(mause)
+		missile.start_at($body/Position2D.global_position,$body/Position2D.global_rotation)
+		missile.add_to_group("players")
+		parent.add_child(missile)
+		canshoot = false
+		$asTimer.start()
 
 func _input(event):
 	var zoom = 0.3
@@ -47,3 +66,17 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 	
 	
+func take_damage(amount):
+	hp-= amount
+	if hp<= 0:
+		get_tree().change_scene("res://main/world.tscn")
+
+func _on_asTimer_timeout():
+	canshoot = true
+	pass # Replace with function body.
+
+
+func _on_hitbox_area_entered(area):
+	if area.is_in_group("damagebox") and !area.is_in_group("players"):
+		take_damage(area.damage)
+	pass # Replace with function body.

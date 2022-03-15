@@ -6,12 +6,31 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32.2455, 31.7572 )
 
-[node name="Area2D" type="Area2D"]
+[node name="Area2D" type="Area2D" groups=[
+"damagebox",
+]]
+scale = Vector2( 0.2, 0.2 )
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 self_modulate = Color( 0, 0, 0, 1 )
 texture = ExtResource( 1 )
 
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 0.787487, -1.57491 )
+scale = Vector2( 1.14765, 1.17225 )
+z_index = -1
+texture = ExtResource( 1 )
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Timer2" type="Timer" parent="."]
+wait_time = 0.001
+autostart = true
+[connection signal="area_entered" from="." to="." method="_on_Area2D_area_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="Timer2" to="." method="_on_Timer2_timeout"]

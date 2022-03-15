@@ -1,19 +1,23 @@
-extends Node
+extends Sprite
 
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var playerProjectile = "res://main/projectiles/blackOrb.tscn"
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#Autoload.connect("died", self, "_add_new_points")
 	pass # Replace with function body.
 
-
-
+func start_at(pos,dir):
+	global_position=pos
+	rotation=dir
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_Timer_timeout():
+	queue_free()
+	pass # Replace with function body.

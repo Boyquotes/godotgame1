@@ -4,7 +4,7 @@
 [ext_resource path="res://main/block1.gd" type="Script" id=2]
 
 [node name="Sprite" type="Sprite"]
-modulate = Color( 0.490196, 0.0431373, 0.0431373, 1 )
+modulate = Color( 0, 0, 0, 1 )
 position = Vector2( -0.115763, -0.213345 )
 scale = Vector2( 10, 6 )
 z_index = -10
